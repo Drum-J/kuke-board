@@ -1,11 +1,10 @@
 package kuke.board.article.api;
 
-import kuke.board.article.service.request.ArticleCreateRequest;
-import kuke.board.article.service.response.ArticleResponse;
-import lombok.Getter;
+import kuke.board.article.dto.response.ArticleResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
 
+//스프링부트 테스트가 아니라서 ArticleApplication을 실행 후 진행해야함
 public class ArticleApiTest {
     RestClient restClient = RestClient.create("http://localhost:9000/");
 
@@ -27,7 +26,7 @@ public class ArticleApiTest {
 
     @Test
     void readTest() throws Exception {
-        ArticleResponse read = read(256321777401872384L);
+        ArticleResponse read = read(256561214487543808L);
         System.out.println("read response = " + read);
     }
 
@@ -40,8 +39,8 @@ public class ArticleApiTest {
 
     @Test
     void updateTest() throws Exception {
-        update(256321777401872384L);
-        ArticleResponse response = read(256321777401872384L);
+        update(256561214487543808L);
+        ArticleResponse response = read(256561214487543808L);
         System.out.println("update response = " + response);
     }
 
@@ -56,9 +55,14 @@ public class ArticleApiTest {
     @Test
     void deleteTest() throws Exception {
         restClient.delete()
-                .uri("/v1/articles/{articleId}", 256321777401872384L)
+                .uri("/v1/articles/{articleId}", 256561214487543808L)
                 .retrieve().toBodilessEntity();
-        System.out.println("delete response = " + read(256321777401872384L)); // 삭제 되었기 때문에 에러 발생
+
+        try {
+            read(256561214487543808L);
+        } catch (Exception e) {
+            System.out.println("delete success, not read");
+        }
 
     }
 

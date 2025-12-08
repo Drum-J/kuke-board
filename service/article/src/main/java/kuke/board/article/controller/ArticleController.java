@@ -1,9 +1,9 @@
 package kuke.board.article.controller;
 
 import kuke.board.article.service.ArticleService;
-import kuke.board.article.service.request.ArticleCreateRequest;
-import kuke.board.article.service.request.ArticleUpdateRequest;
-import kuke.board.article.service.response.ArticleResponse;
+import kuke.board.article.dto.request.ArticleCreateRequest;
+import kuke.board.article.dto.request.ArticleUpdateRequest;
+import kuke.board.article.dto.response.ArticleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
