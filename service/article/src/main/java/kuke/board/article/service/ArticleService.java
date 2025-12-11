@@ -1,5 +1,6 @@
 package kuke.board.article.service;
 
+import kuke.board.article.dto.response.ArticlePageResponse;
 import kuke.board.article.entity.Article;
 import kuke.board.article.exception.ArticleNotFoundException;
 import kuke.board.article.repository.ArticleRepository;
@@ -44,5 +45,15 @@ public class ArticleService {
     @Transactional
     public void delete(Long articleId) {
         articleRepository.deleteById(articleId);
+    }
+
+    public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
+        return new ArticlePageResponse(
+                articleRepository.findAll(boardId, (page - 1) * pageSize, pageSize).stream()
+                        .map(ArticleResponse::from)
+                        .toList(),
+                articleRepository.count(boardId,
+                        PageLimitCalculator.calculatePageLimit(page, pageSize, 10L))
+        );
     }
 }

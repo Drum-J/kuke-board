@@ -1,5 +1,7 @@
 package kuke.board.article.controller;
 
+import kuke.board.article.dto.request.ArticleReadAllRequest;
+import kuke.board.article.dto.response.ArticlePageResponse;
 import kuke.board.article.service.ArticleService;
 import kuke.board.article.dto.request.ArticleCreateRequest;
 import kuke.board.article.dto.request.ArticleUpdateRequest;
@@ -16,6 +18,11 @@ public class ArticleController {
     @GetMapping("/v1/article/{articleId}")
     public ArticleResponse read(@PathVariable Long articleId) {
         return articleService.read(articleId);
+    }
+
+    @GetMapping("/v1/articles")
+    public ArticlePageResponse readAll(ArticleReadAllRequest request) {
+        return articleService.readAll(request.boardId(), request.page(), request.pageSize());
     }
 
     @PostMapping("/v1/articles")

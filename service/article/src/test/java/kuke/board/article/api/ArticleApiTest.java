@@ -1,5 +1,6 @@
 package kuke.board.article.api;
 
+import kuke.board.article.dto.response.ArticlePageResponse;
 import kuke.board.article.dto.response.ArticleResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
@@ -64,6 +65,20 @@ public class ArticleApiTest {
             System.out.println("delete success, not read");
         }
 
+    }
+
+    @Test
+    void readAllTest() throws Exception {
+        //given
+        ArticlePageResponse response = restClient.get()
+                .uri("/v1/articles?boardId=1&page=50000&pageSize=30")
+                .retrieve()
+                .body(ArticlePageResponse.class);
+
+        System.out.println("response.articleCount() = " + response.articleCount());
+        for (ArticleResponse article : response.articles()) {
+            System.out.println("articleId = " + article.articleId());
+        }
     }
 
     record ArticleCreateRequest(String title, String content, Long writerId, Long boardId) {}
