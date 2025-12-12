@@ -3,7 +3,10 @@ package kuke.board.article.api;
 import kuke.board.article.dto.response.ArticlePageResponse;
 import kuke.board.article.dto.response.ArticleResponse;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
+
+import java.util.List;
 
 //스프링부트 테스트가 아니라서 ArticleApplication을 실행 후 진행해야함
 public class ArticleApiTest {
@@ -78,6 +81,33 @@ public class ArticleApiTest {
         System.out.println("response.articleCount() = " + response.articleCount());
         for (ArticleResponse article : response.articles()) {
             System.out.println("articleId = " + article.articleId());
+        }
+    }
+
+    @Test
+    void readAllInfiniteScrollTest() throws Exception {
+        List<ArticleResponse> articles1 = restClient.get()
+                .uri("/v1/articles/infinite-scroll?boardId=1&pageSize=30")
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ArticleResponse>>() {
+                });
+
+        System.out.println("first page");
+        assert articles1 != null;
+        for (ArticleResponse articleResponse : articles1) {
+            System.out.println("articleResponse.articleId() = " + articleResponse.articleId());
+        }
+
+        Long lastArticleId = articles1.getLast().articleId();
+        List<ArticleResponse> articles2 = restClient.get()
+                .uri("/v1/articles/infinite-scroll?boardId=1&pageSize=30&lastArticleId=" + lastArticleId)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ArticleResponse>>() {
+                });
+        System.out.println("second page");
+        assert articles2 != null;
+        for (ArticleResponse articleResponse : articles2) {
+            System.out.println("articleResponse.articleId() = " + articleResponse.articleId());
         }
     }
 

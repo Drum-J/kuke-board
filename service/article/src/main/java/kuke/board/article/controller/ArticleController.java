@@ -1,5 +1,6 @@
 package kuke.board.article.controller;
 
+import kuke.board.article.dto.request.ArticleInfiniteScrollRequest;
 import kuke.board.article.dto.request.ArticleReadAllRequest;
 import kuke.board.article.dto.response.ArticlePageResponse;
 import kuke.board.article.service.ArticleService;
@@ -8,6 +9,8 @@ import kuke.board.article.dto.request.ArticleUpdateRequest;
 import kuke.board.article.dto.response.ArticleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,11 @@ public class ArticleController {
     @GetMapping("/v1/articles")
     public ArticlePageResponse readAll(ArticleReadAllRequest request) {
         return articleService.readAll(request.boardId(), request.page(), request.pageSize());
+    }
+
+    @GetMapping("/v1/articles/infinite-scroll")
+    public List<ArticleResponse> readAllInfiniteScroll(ArticleInfiniteScrollRequest request) {
+        return articleService.readAllInfiniteScroll(request.boardId(), request.pageSize(), request.lastArticleId());
     }
 
     @PostMapping("/v1/articles")
